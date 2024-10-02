@@ -35,6 +35,6 @@ class Difficulty extends StatelessWidget {
           color: (dificultyLevel >= 5) ? Colors.blue : Colors.blue[100],
         ),
       ],
-    )
+    );
   }
 }
