@@ -25,19 +25,19 @@ class _FormScreenState extends State<FormScreen> {
           body: Center(
             child: SingleChildScrollView(
               child: Container(
-                height: 650,
+                height: 700,
                   width: 375,
                 decoration: BoxDecoration(
                   color: Colors.lightBlueAccent,
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(width: 4, color: Colors.teal),
+                  border: Border.all(width: 4, color: Colors.indigo),
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Padding(
-                        padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
                         validator: (String? value) {
                           if (value != null && value.isEmpty) {
@@ -48,10 +48,24 @@ class _FormScreenState extends State<FormScreen> {
                         controller: nameController,
                         textAlign: TextAlign.center,
                         decoration: InputDecoration(
-                          border: OutlineInputBorder(),
                           hintText: 'Nome da tarefa',
                           fillColor: Colors.white,
                           filled: true,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: const BorderSide(
+                              color: Colors.deepPurple, // Cor da borda
+                              width: 2.0, // Largura da borda
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: const BorderSide(
+                              color: Colors.blueAccent, // Cor da borda quando focado
+                              width: 2.0,
+                            ),
+                          ),
+                          // Adicione mais estilos aqui, se necessário
                         ),
                       ),
                     ),
@@ -60,7 +74,7 @@ class _FormScreenState extends State<FormScreen> {
                       child: TextFormField(
                         validator: (value) {
                           if (value!.isEmpty || int.parse(value) > 5 || int.parse(value) < 1) {
-                            return 'Insira uma dificuldades entre 1 e 5';
+                            return 'Insira uma dificuldade entre 1 e 5';
                           }
                           return null;
                         },
@@ -68,10 +82,23 @@ class _FormScreenState extends State<FormScreen> {
                         controller: difficultyController,
                         textAlign: TextAlign.center,
                         decoration: InputDecoration(
-                          border: OutlineInputBorder(),
                           hintText: 'Dificuldade',
                           fillColor: Colors.white,
                           filled: true,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: const BorderSide(
+                              color: Colors.deepPurple,
+                              width: 2.0,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: const BorderSide(
+                              color: Colors.blueAccent,
+                              width: 2.0,
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -79,8 +106,7 @@ class _FormScreenState extends State<FormScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
                         onChanged: (text) {
-                          setState(() {
-                          });
+                          setState(() {});
                         },
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -92,10 +118,23 @@ class _FormScreenState extends State<FormScreen> {
                         controller: imageController,
                         textAlign: TextAlign.center,
                         decoration: InputDecoration(
-                          border: OutlineInputBorder(),
                           hintText: 'Imagem',
                           fillColor: Colors.white,
                           filled: true,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: const BorderSide(
+                              color: Colors.deepPurple,
+                              width: 2.0,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: const BorderSide(
+                              color: Colors.blueAccent,
+                              width: 2.0,
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -103,9 +142,12 @@ class _FormScreenState extends State<FormScreen> {
                       height: 120,
                       width: 92,
                       decoration: BoxDecoration(
-                        color: Colors.indigo,
+                        color: Colors.white, // Cor de fundo branca
                         borderRadius: BorderRadius.circular(10),
-                        border:  Border.all(width: 2, color: Colors.blue),
+                        border: Border.all(
+                          width: 2,
+                          color: Colors.deepPurple, // Borda roxa
+                        ),
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
@@ -120,14 +162,23 @@ class _FormScreenState extends State<FormScreen> {
                       ),
                     ),
                     ElevatedButton(
-                        onPressed: () {
-                          if(_formKey.currentState!.validate()) {
-                            print(nameController.text);
-                            print(difficultyController.text);
-                            print(imageController.text);
-                          }
-                        },
-                        child: Text('Adicionar'),
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          print(nameController.text);
+                          print(difficultyController.text);
+                          print(imageController.text);
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.indigo,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                        textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: const Text('Adicionar'),
                     ),
                   ],
                 ),
