@@ -1,8 +1,10 @@
 //versão para teste
 import 'package:flutter/material.dart';
+import 'package:flutteraula02/data/task_inherited.dart';
 
 class FormScreen extends StatefulWidget {
-  const FormScreen({super.key});
+  const FormScreen({super.key, required this.taskContext});  // ---> add o parâmetro da inherited
+  final BuildContext taskContext;   // ---> variavel para o widget ihnerited
 
   @override
   State<FormScreen> createState() => _FormScreenState();
@@ -55,18 +57,17 @@ class _FormScreenState extends State<FormScreen> {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
                             borderSide: const BorderSide(
-                              color: Colors.deepPurple, // Cor da borda
-                              width: 2.0, // Largura da borda
+                              color: Colors.deepPurple,
+                              width: 2.0,
                             ),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
                             borderSide: const BorderSide(
-                              color: Colors.blueAccent, // Cor da borda quando focado
+                              color: Colors.blueAccent,
                               width: 2.0,
                             ),
                           ),
-                          // Adicione mais estilos aqui, se necessário
                         ),
                       ),
                     ),
@@ -79,7 +80,7 @@ class _FormScreenState extends State<FormScreen> {
                           }
                           return null;
                         },
-                        keyboardType: TextInputType.number,
+                        keyboardType: TextInputType.number, // ---> para trocar o tipo de teclado
                         controller: difficultyController,
                         textAlign: TextAlign.center,
                         decoration: InputDecoration(
@@ -143,11 +144,11 @@ class _FormScreenState extends State<FormScreen> {
                       height: 120,
                       width: 92,
                       decoration: BoxDecoration(
-                        color: Colors.white, // Cor de fundo branca
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
                           width: 2,
-                          color: Colors.deepPurple, // Borda roxa
+                          color: Colors.deepPurple,
                         ),
                       ),
                       child: ClipRRect(
@@ -165,9 +166,19 @@ class _FormScreenState extends State<FormScreen> {
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          print(nameController.text);
-                          print(difficultyController.text);
-                          print(imageController.text);
+                          // print(nameController.text);  --> troca de saída
+                          // print(difficultyController.text);
+                          // print(imageController.text);
+                          TaskInherited.of(widget.taskContext).newTask(
+                              nameController.text,
+                              imageController.text,
+                              int.parse(difficultyController.text));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text('Criando uma nova Tarefa'),
+                            ),
+                          );
+                          Navigator.pop(context); // ---> add o navigator
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -179,6 +190,7 @@ class _FormScreenState extends State<FormScreen> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
+
                       child: const Text('Adicionar'),
                     ),
                   ],
