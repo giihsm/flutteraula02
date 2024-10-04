@@ -16,6 +16,15 @@ class Task extends StatefulWidget {
 class _State extends State<Task> {
   int nivel = 0;
 
+  //PARA o tratamento do widget da imagem
+  //q  na tela inicial vai receber imagem do assets ou da web -- criamos um método
+  bool assetOrNetwork() {
+    if (widget.foto.contains('http')) {
+      return false;
+    }
+    return true;
+  }
+
   //construção da tela do componente task
   @override
   Widget build(BuildContext context) {
@@ -48,10 +57,20 @@ class _State extends State<Task> {
                       height: 100,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(4),
-                        child: Image.asset(
-                          widget.foto,
-                          fit: BoxFit.cover,
-                        ),
+                        child: assetOrNetwork()
+                            ? Image.asset(
+                                widget.foto,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.network(
+                                widget.foto,
+                                fit: BoxFit.cover,
+                              ),
+                        //comentário de identificação de ajuste
+                        //de carregamento de widget
+                        //Image.asset(
+                        //widget.foto,
+                        //fit: BoxFit.cover,
                       ),
                     ),
                     Column(
@@ -67,7 +86,8 @@ class _State extends State<Task> {
                                 overflow: TextOverflow.ellipsis,
                               ),
                             )),
-                        Difficulty(dificultyLevel: widget.dificuldade,
+                        Difficulty(
+                          dificultyLevel: widget.dificuldade,
                         ),
                       ],
                     ),
