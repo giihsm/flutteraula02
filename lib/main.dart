@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutteraula02/screens/form_screen.dart';
+import 'package:flutteraula02/data/task_inherited.dart';
 import 'package:flutteraula02/screens/initial_screen.dart';
 
 void main() {
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const FormScreen(), //aqui vai a tela que a gente vai criar
+      home: TaskInherited(child: const InitialScreen()),  // --- importada a inherited e ajustado a navegação aqui
     );
   }
 }
