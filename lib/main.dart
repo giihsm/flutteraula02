@@ -1,25 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:flutteraula02/data/task_inherited.dart';
-import 'package:flutteraula02/screens/initial_screen.dart';
+import 'package:flutteraula02/screens/gadgets_screen.dart';
+import 'package:flutteraula02/screens/home_screen.dart';
+import 'package:flutteraula02/screens/user_profile_screen.dart';
+import 'data/app_data_inherited_widget.dart';
+import 'data/theme_provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final List<String> gadgets = [];
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'App com telas',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return ThemeProvider(
+      themeColor: Colors.blueGrey,
+      child: AppDataInheritedWidget(
+        gadgets: gadgets,
+        addGadget: (String gadget) {
+          gadgets.add(gadget);
+        },
+        child: MaterialApp(
+          title: 'Tech App',
+          debugShowCheckedModeBanner: false,
+          initialRoute: '/',
+          routes: {
+            '/': (context) => HomeScreen(),
+            '/gadgets': (context) => GadgetsScreen(),
+            '/userProfile': (context) => UserProfileScreen(),
+          },
+        ),
       ),
-      home: TaskInherited(child: const InitialScreen()),  // --- importada a inherited e ajustado a navegação aqui
     );
   }
 }
-//main básica para início de app
-
