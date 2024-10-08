@@ -1,36 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:flutteraula02/screens/gadgets_screen.dart';
-import 'package:flutteraula02/screens/home_screen.dart';
-import 'package:flutteraula02/screens/user_profile_screen.dart';
-import 'data/app_data_inherited_widget.dart';
-import 'data/theme_provider.dart';
+import 'package:flutteraula02/data/task_inherited.dart';
+import 'package:flutteraula02/screens/splash_screen.dart';
+
+import 'components/task.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final List<String> gadgets = [];
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ThemeProvider(
-      themeColor: Colors.blueGrey,
-      child: AppDataInheritedWidget(
-        gadgets: gadgets,
-        addGadget: (String gadget) {
-          gadgets.add(gadget);
-        },
-        child: MaterialApp(
-          title: 'Tech App',
-          debugShowCheckedModeBanner: false,
-          initialRoute: '/',
-          routes: {
-            '/': (context) => HomeScreen(),
-            '/gadgets': (context) => GadgetsScreen(),
-            '/userProfile': (context) => UserProfileScreen(),
-          },
+    List<Task> initialTasks = [];
+
+    void updateList(List<Task> newTasks) {
+      initialTasks = newTasks;
+    }
+
+    return TaskInherited(
+      taskList: initialTasks,
+      updateList: updateList,
+      child: MaterialApp(
+        title: 'App com telas',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
         ),
+        home: const SplashScreen(),
       ),
     );
   }

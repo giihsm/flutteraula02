@@ -8,24 +8,33 @@ class Task extends StatefulWidget {
 
   const Task(this.nome, this.foto, this.dificuldade, {super.key});
 
+  factory Task.fromMap(Map<String, dynamic> map) {
+    return Task(
+      map['name'],
+      map['image'],
+      map['difficulty'],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': nome,
+      'difficulty': dificuldade,
+      'image': foto,
+    };
+  }
+
   @override
   State<Task> createState() => _State();
 }
 
-@override
 class _State extends State<Task> {
   int nivel = 0;
 
-  //PARA o tratamento do widget da imagem
-  //q  na tela inicial vai receber imagem do assets ou da web -- criamos um método
   bool assetOrNetwork() {
-    if (widget.foto.contains('http')) {
-      return false;
-    }
-    return true;
+    return !widget.foto.contains('http');
   }
 
-  //construção da tela do componente task
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -59,18 +68,13 @@ class _State extends State<Task> {
                         borderRadius: BorderRadius.circular(4),
                         child: assetOrNetwork()
                             ? Image.asset(
-                                widget.foto,
-                                fit: BoxFit.cover,
-                              )
+                          widget.foto,
+                          fit: BoxFit.cover,
+                        )
                             : Image.network(
-                                widget.foto,
-                                fit: BoxFit.cover,
-                              ),
-                        //comentário de identificação de ajuste
-                        //de carregamento de widget
-                        //Image.asset(
-                        //widget.foto,
-                        //fit: BoxFit.cover,
+                          widget.foto,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                     Column(
@@ -78,41 +82,40 @@ class _State extends State<Task> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
-                            width: 200,
-                            child: Text(
-                              widget.nome,
-                              style: const TextStyle(
-                                fontSize: 24,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            )),
-                        Difficulty(
-                          dificultyLevel: widget.dificuldade,
+                          width: 200,
+                          child: Text(
+                            widget.nome,
+                            style: const TextStyle(
+                              fontSize: 24,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
                         ),
+                        Difficulty(dificultyLevel: widget.dificuldade),
                       ],
                     ),
                     SizedBox(
                       height: 52,
                       width: 52,
                       child: ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              nivel++;
-                            });
-                            // print(nivel);
-                          },
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: const [
-                              Icon(Icons.arrow_drop_up),
-                              Text(
-                                'UP',
-                                style: TextStyle(fontSize: 12),
-                              )
-                            ],
-                          )),
-                    )
+                        onPressed: () {
+                          setState(() {
+                            nivel++;
+                          });
+                        },
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: const [
+                            Icon(Icons.arrow_drop_up),
+                            Text(
+                              'UP',
+                              style: TextStyle(fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -134,10 +137,10 @@ class _State extends State<Task> {
                   Padding(
                     padding: const EdgeInsets.all(12),
                     child: Text(
-                      'Nivel: $nivel',
+                      'Nível: $nivel',
                       style: const TextStyle(color: Colors.white, fontSize: 16),
                     ),
-                  )
+                  ),
                 ],
               ),
             ],
