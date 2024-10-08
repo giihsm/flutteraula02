@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutteraula02/screens/initial_screen.dart'; // Tela inicial
+import 'package:flutteraula02/screens/initial_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -12,15 +12,15 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _navegarParaHome();
+    _navigateToHome();
   }
 
-  void _navegarParaHome() {
-    Future.delayed(const Duration(seconds: 3), () {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const InitialScreen()),
-      );
-    });
+  _navigateToHome() async {
+    await Future.delayed(const Duration(seconds: 3), () {});
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => InitialScreen()),
+    );
   }
 
   @override
@@ -30,16 +30,10 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image.asset(
-              'assets/images/list.png',
-              width: 150,
-              height: 150,
-            ),
+          children: [
+            Image.asset('assets/images/list.png', width: 150, height: 150),
             const SizedBox(height: 20),
             const CircularProgressIndicator(),
-            // A quantidade de tarefas será exibida na tela inicial
-            const Text('Carregando...'),
           ],
         ),
       ),

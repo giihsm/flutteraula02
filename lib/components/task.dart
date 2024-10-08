@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutteraula02/components/difficulty.dart';
+import 'package:flutteraula02/data/task_dao.dart';
 
 class Task extends StatefulWidget {
   final String nome;
@@ -8,144 +9,122 @@ class Task extends StatefulWidget {
 
   const Task(this.nome, this.foto, this.dificuldade, {super.key});
 
-  factory Task.fromMap(Map<String, dynamic> map) {
-    return Task(
-      map['name'],
-      map['image'],
-      map['difficulty'],
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'name': nome,
-      'difficulty': dificuldade,
-      'image': foto,
-    };
-  }
-
   @override
   State<Task> createState() => _State();
 }
 
+@override
 class _State extends State<Task> {
   int nivel = 0;
 
+  // Função para verificar se a imagem é da web ou dos assets
   bool assetOrNetwork() {
     return !widget.foto.contains('http');
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4), color: Colors.blue),
-            height: 140,
+    return Dismissible(
+      key: UniqueKey(),
+      direction: DismissDirection.endToStart,
+      onDismissed: (direction) {
+        // Exclui a tarefa ao arrastar
+        TaskDao().delete(widget.nome);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Tarefa "${widget.nome}" excluída')),
+        );
+      },
+      background: Container(
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        color: Colors.indigo,
+        child: const Icon(Icons.delete, color: Colors.white),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 2,
+                blurRadius: 5,
+                offset: const Offset(0, 3),
+              ),
+            ],
           ),
-          Column(
+          child: Column(
             children: [
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                  color: Colors.white,
+              ListTile(
+                leading: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: assetOrNetwork()
+                      ? Image.asset(
+                    widget.foto,
+                    width: 72,
+                    height: 72,
+                    fit: BoxFit.cover,
+                  )
+                      : Image.network(
+                    widget.foto,
+                    width: 72,
+                    height: 72,
+                    fit: BoxFit.cover,
+                  ),
                 ),
-                height: 100,
+                title: Text(
+                  widget.nome,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                subtitle: Difficulty(
+                  dificultyLevel: widget.dificuldade,
+                ),
+                trailing: IconButton(
+                  icon: const Icon(Icons.delete),
+                  color: Colors.redAccent,
+                  onPressed: () {
+                    TaskDao().delete(widget.nome); // função de exclusão
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4),
-                        color: Colors.black26,
-                      ),
-                      width: 72,
-                      height: 100,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(4),
-                        child: assetOrNetwork()
-                            ? Image.asset(
-                          widget.foto,
-                          fit: BoxFit.cover,
-                        )
-                            : Image.network(
-                          widget.foto,
-                          fit: BoxFit.cover,
-                        ),
+                    Expanded(
+                      child: LinearProgressIndicator(
+                        value: (widget.dificuldade > 0)
+                            ? (nivel / widget.dificuldade) / 10
+                            : 1,
+                        backgroundColor: Colors.grey[300],
+                        color: Colors.blueAccent,
                       ),
                     ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: 200,
-                          child: Text(
-                            widget.nome,
-                            style: const TextStyle(
-                              fontSize: 24,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ),
-                        Difficulty(dificultyLevel: widget.dificuldade),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 52,
-                      width: 52,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            nivel++;
-                          });
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: const [
-                            Icon(Icons.arrow_drop_up),
-                            Text(
-                              'UP',
-                              style: TextStyle(fontSize: 12),
-                            ),
-                          ],
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16),
+                      child: Text(
+                        'Nível: $nivel',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                   ],
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: SizedBox(
-                      child: LinearProgressIndicator(
-                        color: Colors.white,
-                        value: (widget.dificuldade > 0)
-                            ? (nivel / widget.dificuldade) / 10
-                            : 1,
-                      ),
-                      width: 200,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Text(
-                      'Nível: $nivel',
-                      style: const TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                  ),
-                ],
-              ),
+              const SizedBox(height: 12),
             ],
           ),
-        ],
+        ),
       ),
     );
   }

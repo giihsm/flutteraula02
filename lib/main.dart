@@ -20,8 +20,7 @@ class MyApp extends StatelessWidget {
     }
 
     return TaskInherited(
-      taskList: initialTasks,
-      updateList: updateList,
+
       child: MaterialApp(
         title: 'App com telas',
         theme: ThemeData(
