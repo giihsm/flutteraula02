@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutteraula02/data/task_dao.dart';
 import 'package:flutteraula02/screens/form_screen.dart';
-
 import '../components/task.dart';
+import 'ApiScreen.dart';
 
 class InitialScreen extends StatefulWidget {
   const InitialScreen({Key? key}) : super(key: key);
@@ -38,7 +38,6 @@ class _InitialScreenState extends State<InitialScreen> {
             ),
             IconButton(
               onPressed: () {
-                // Ação do botão refresh
               },
               icon: const Icon(Icons.refresh, color: Colors.white),
             ),
@@ -108,23 +107,50 @@ class _InitialScreenState extends State<InitialScreen> {
               return const Text('Erro desconhecido');
             }),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (contextNew) => FormScreen(
-                taskContext: context,
+      floatingActionButton: Stack(
+        children: <Widget>[
+          Positioned(
+            bottom: 85,
+            right: 16,
+            child: FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (contextNew) => const ApiScreen()),
+                );
+              },
+              backgroundColor: Colors.deepPurpleAccent,
+              child: const Icon(Icons.calendar_today, size: 35, color: Colors.white),
+              elevation: 6,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
               ),
             ),
-          ).then((value) => setState(() {}));
-        },
-        backgroundColor: Colors.deepPurpleAccent,
-        child: const Icon(Icons.add, size: 35, color: Colors.white),
-        elevation: 6,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+          ),
+          // Botão para adicionar novas tarefas
+          Positioned(
+            bottom: 16, // Altura do botão de tarefas
+            right: 16,
+            child: FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (contextNew) => FormScreen(
+                      taskContext: context,
+                    ),
+                  ),
+                ).then((value) => setState(() {}));
+              },
+              backgroundColor: Colors.deepPurpleAccent,
+              child: const Icon(Icons.add, size: 35, color: Colors.white),
+              elevation: 6,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
